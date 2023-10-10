@@ -92,7 +92,7 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
             final scrollController = ItemScrollController();
 
             return Container(
-              constraints: BoxConstraints(maxHeight: menuMaxHeight ?? 200),
+              constraints: BoxConstraints(maxHeight: menuMaxHeight ?? 230),
               decoration: BoxDecoration(
                 color: const Color(0xfff2f2f2),
                 borderRadius: BorderRadius.circular(16),

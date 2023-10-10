@@ -100,7 +100,8 @@ class BisFormBuilder extends StatefulWidget {
 typedef BisFormFields
     = Map<String, BisFormFieldState<BisFormField<dynamic>, dynamic>>;
 
-class BisFormBuilderState extends State<BisFormBuilder> {
+class BisFormBuilderState extends State<BisFormBuilder>
+    with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final BisFormFields _fields = {};
   final Map<String, dynamic> _instantValue = {};
@@ -335,8 +336,10 @@ class BisFormBuilderState extends State<BisFormBuilder> {
       });
 
       _bsController = showBottomSheet(
+        transitionAnimationController:
+            AnimationController(vsync: this, duration: Duration.zero),
         context: context,
-        builder: (_) => AnimatedContainer(
+        builder: (_) => Container(
           padding: EdgeInsets.only(
             top: 8,
             left: 8,
@@ -356,7 +359,7 @@ class BisFormBuilderState extends State<BisFormBuilder> {
             ],
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
-          duration: const Duration(milliseconds: 100),
+          // duration: const Duration(milliseconds: 100),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
