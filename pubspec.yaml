@@ -1,7 +1,7 @@
 name: bottom_input_system
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
+homepage: https://github.com/bigin-ui/bottom_input_system
 
 environment:
   sdk: '>=3.1.2 <4.0.0'
@@ -52,3 +52,7 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family:  SentroIcon
+      fonts:
+       - asset: lib/assets/fonts/SentroIcon.ttf

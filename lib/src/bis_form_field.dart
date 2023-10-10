@@ -6,6 +6,8 @@ enum OptionsOrientation { horizontal, vertical, wrap }
 
 enum ControlAffinity { leading, trailing }
 
+enum FieldType { textfield, dropdown }
+
 typedef ValueTransformer<T> = dynamic Function(T value);
 
 /// A single form field.
@@ -16,6 +18,7 @@ class BisFormField<T> extends FormField<T> {
   /// Used to reference the field within the form, or to reference form data
   /// after the form is submitted.
   final String name;
+  final FieldType fieldType;
 
   /// Called just before field value is saved. Used to massage data just before
   /// committing the value.
@@ -61,6 +64,7 @@ class BisFormField<T> extends FormField<T> {
     required super.builder,
     required this.bsBuilder,
     required this.name,
+    required this.fieldType,
     this.valueTransformer,
     this.onChanged,
     this.onReset,

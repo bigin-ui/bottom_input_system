@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:bottom_input_system/src/extensions/sentro_icon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_input_system/bottom_input_system.dart';
 
@@ -109,7 +108,8 @@ class BisFormBuilderState extends State<BisFormBuilder> {
   // Because dart type system will not accept ValueTransformer<dynamic>
   final Map<String, Function> _transformers = {};
   bool _focusOnInvalid = true;
-  PersistentBottomSheetController? bsController;
+  PersistentBottomSheetController? _bsController;
+  String currentFieldName = '';
 
   /// Will be true if will focus on invalid field when validate
   ///
@@ -303,41 +303,131 @@ class BisFormBuilderState extends State<BisFormBuilder> {
     });
   }
 
+  void activeNextField(String currentWidget) {
+    var currentIndex = _fields.entries
+        .toList()
+        .indexWhere((element) => element.value.widget.name == currentWidget);
+    var nextWidget = _fields.entries.elementAt(currentIndex + 1);
+    activateBottomsheet(nextWidget.value.widget.name);
+  }
+
   void activateBottomsheet(String widgetName) {
-    bsController = showBottomSheet(
-      context: context,
-      builder: (_) => SafeArea(
-        minimum: EdgeInsets.only(
-          top: 8,
-          left: 8,
-          right: 8,
-          bottom: max(8, MediaQuery.of(context).viewPadding.bottom),
-        ),
-        child: Row(
-          children: [
-            IconButton.filled(
-              onPressed: bsController?.close,
-              icon: const Icon(Icons.close),
-            ),
-            Expanded(
-              child: Builder(
-                builder: (_) {
-                  var fieldState = _fields.entries
-                      .firstWhere(
-                          (element) => element.value.widget.name == widgetName)
-                      .value;
-                  return fieldState.bsBuilder(fieldState);
-                },
+    var fieldState = _fields.entries
+        .firstWhere((element) => element.value.widget.name == widgetName)
+        .value;
+    var snapshotValue = fieldState.value;
+
+    bool isLastField = _fields.entries.last.value.widget.name == widgetName;
+
+    void deactivateBottomsheet(dynamic fieldValue) {
+      setState(() {
+        currentFieldName = '';
+        fieldState.didChange(fieldValue);
+      });
+      _bsController?.close();
+    }
+
+    if (currentFieldName != widgetName) {
+      setState(() {
+        currentFieldName = widgetName;
+        // Trigger rebuild BisFormFieldView
+        fieldState.didChange(snapshotValue);
+      });
+
+      _bsController = showBottomSheet(
+        context: context,
+        builder: (_) => AnimatedContainer(
+          padding: EdgeInsets.only(
+            top: 8,
+            left: 8,
+            right: 8,
+            bottom: MediaQuery.of(_).viewInsets.bottom > 0
+                ? 8
+                : MediaQuery.of(context).viewPadding.bottom,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 12,
+                offset: Offset(4, -4),
               ),
-            ),
-            IconButton.filled(
-              onPressed: bsController?.close,
-              icon: const Icon(Icons.check),
-            ),
-          ],
+            ],
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          duration: const Duration(milliseconds: 100),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 38,
+                height: 38,
+                child: IconButton.filled(
+                  onPressed: () {
+                    deactivateBottomsheet(snapshotValue);
+                  },
+                  icon: const Icon(SentroIcon.clear),
+                  iconSize: 22,
+                  padding: EdgeInsets.zero,
+                  style: IconButton.styleFrom(
+                    backgroundColor: const Color(0xfff2f2f2),
+                    foregroundColor: const Color(0xff333333),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: Builder(
+                  builder: (_) {
+                    return fieldState.bsBuilder(fieldState);
+                  },
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              SizedBox(
+                width: 38,
+                height: 38,
+                child: isLastField
+                    ? IconButton.filled(
+                        onPressed: () =>
+                            deactivateBottomsheet(fieldState.value),
+                        icon: const Icon(SentroIcon.check),
+                        iconSize: 22,
+                        padding: EdgeInsets.zero,
+                        style: IconButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: const Color(0xffffffff),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      )
+                    : IconButton.filled(
+                        onPressed: () => activeNextField(widgetName),
+                        icon: const Icon(SentroIcon.arrow_right),
+                        iconSize: 22,
+                        padding: EdgeInsets.zero,
+                        style: IconButton.styleFrom(
+                          backgroundColor: const Color(0xfff2f2f2),
+                          foregroundColor: const Color(0xff333333),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override

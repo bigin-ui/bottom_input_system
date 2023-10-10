@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Bottom Input System Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        primaryColor: Colors.amber.shade700,
         useMaterial3: true,
       ),
       home: const FormExample(),
@@ -28,7 +29,6 @@ class FormExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Bottom Input System'),
       ),
       body: Padding(
@@ -39,14 +39,18 @@ class FormExample extends StatelessWidget {
             children: [
               BisTextField(
                 name: 'Email',
-                initialValue: 'tam.mai@bigin.vn',
+                decoration: const InputDecoration(
+                  hintText: 'Enter your email',
+                ),
               ),
               const SizedBox(
                 height: 8,
               ),
               BisTextField(
                 name: 'Password',
-                initialValue: '3nanaPotat0',
+                decoration: const InputDecoration(
+                  hintText: 'Enter your password',
+                ),
               ),
             ],
           ),

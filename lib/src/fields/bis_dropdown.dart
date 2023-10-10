@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:bottom_input_system/bottom_input_system.dart';
 import 'package:bottom_input_system/src/extensions/generic_validator.dart';
 
+import '../bis_form_field_view.dart';
+
 /// Field for Dropdown button
 class BisDropdown<T> extends BisFormFieldDecoration<T> {
   /// The list of items the user can select.
@@ -220,6 +222,7 @@ class BisDropdown<T> extends BisFormFieldDecoration<T> {
   BisDropdown({
     super.key,
     required super.name,
+    super.fieldType = FieldType.dropdown,
     super.validator,
     super.initialValue,
     super.decoration,
@@ -255,12 +258,12 @@ class BisDropdown<T> extends BisFormFieldDecoration<T> {
           builder: (FormFieldState<T?> field) {
             final state = field as _BisDropdownState<T>;
 
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.grey.shade50,
-              ),
-              child: Text(state.value.toString()),
+            return BisFormFieldView(
+              formBuilderState: state.formBuilderState,
+              name: name,
+              value: state.value,
+              hintText: decoration.hintText,
+              type: fieldType,
             );
           },
           bsBuilder: (FormFieldState<T?> field) {

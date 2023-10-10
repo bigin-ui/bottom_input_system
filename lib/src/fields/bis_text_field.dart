@@ -1,5 +1,6 @@
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
+import 'package:bottom_input_system/src/bis_form_field_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -292,6 +293,7 @@ class BisTextField extends BisFormFieldDecoration<String> {
   BisTextField({
     super.key,
     required super.name,
+    super.fieldType = FieldType.textfield,
     super.validator,
     super.decoration,
     super.onChanged,
@@ -368,27 +370,12 @@ class BisTextField extends BisFormFieldDecoration<String> {
           builder: (FormFieldState<String?> field) {
             final state = field as _BisTextFieldState;
 
-            return GestureDetector(
-              onTap: () => field.formBuilderState?.activateBottomsheet(name),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: const Color(0x09000000),
-                ),
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      state.value.toString(),
-                    ),
-                  ],
-                ),
-              ),
+            return BisFormFieldView(
+              formBuilderState: state.formBuilderState,
+              name: name,
+              value: state.value,
+              hintText: decoration.hintText,
+              type: fieldType,
             );
           },
           bsBuilder: (FormFieldState<String?> field) {
@@ -398,10 +385,26 @@ class BisTextField extends BisFormFieldDecoration<String> {
               restorationId: restorationId,
               controller: state._effectiveController,
               focusNode: state.effectiveFocusNode,
-              decoration: state.decoration,
+              decoration: state.decoration.copyWith(
+                  filled: true,
+                  fillColor: const Color(0xfff2f2f2),
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: const EdgeInsets.all(8)),
               keyboardType: keyboardType,
               textInputAction: textInputAction,
-              style: style,
+              style: style != null
+                  ? style.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    )
+                  : const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
               strutStyle: strutStyle,
               textAlign: textAlign,
               textAlignVertical: textAlignVertical,

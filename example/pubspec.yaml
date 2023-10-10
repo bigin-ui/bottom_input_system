@@ -96,3 +96,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+      - family:  SentroIcon
+        fonts:
+        - asset: packages/bottom_input_system/assets/fonts/SentroIcon.ttf

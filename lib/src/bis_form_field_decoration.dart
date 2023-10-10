@@ -15,6 +15,7 @@ class BisFormFieldDecoration<T> extends BisFormField<T> {
     super.validator,
     super.restorationId,
     required super.name,
+    required super.fieldType,
     super.valueTransformer,
     super.onChanged,
     super.onReset,
