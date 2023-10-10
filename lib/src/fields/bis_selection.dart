@@ -1,7 +1,5 @@
-import 'dart:ffi';
 import 'dart:math';
 
-import 'package:bottom_input_system/src/extensions/globals.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_input_system/bottom_input_system.dart';
