@@ -6,7 +6,7 @@ enum OptionsOrientation { horizontal, vertical, wrap }
 
 enum ControlAffinity { leading, trailing }
 
-enum FieldType { textfield, dropdown }
+enum FieldType { textfield, selection, datepicker }
 
 typedef ValueTransformer<T> = dynamic Function(T value);
 
@@ -50,7 +50,7 @@ class BisFormField<T> extends FormField<T> {
   /// Function that returns the widget representing this form field. It is
   /// passed the form field state as input, containing the current value and
   /// validation state of this field.
-  final FormFieldBuilder<T> bsBuilder;
+  final FormFieldBsBuilder<T> bsBuilder;
 
   /// Creates a single form field.
   const BisFormField({

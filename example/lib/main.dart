@@ -46,10 +46,34 @@ class FormExample extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              BisTextField(
-                name: 'Password',
+              BisSelection(
+                name: 'Role',
                 decoration: const InputDecoration(
-                  hintText: 'Enter your password',
+                  hintText: 'Select your role',
+                ),
+                items: [
+                  'Developer',
+                  'Product Owner',
+                  'Business Analysis',
+                  'Product Designer',
+                  'Project Coordinator',
+                  'Quality Assurance'
+                ]
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      ),
+                    )
+                    .toList(),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              BisTextField(
+                name: 'Name',
+                decoration: const InputDecoration(
+                  hintText: 'Enter your name',
                 ),
               ),
             ],

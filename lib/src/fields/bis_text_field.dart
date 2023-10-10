@@ -378,7 +378,7 @@ class BisTextField extends BisFormFieldDecoration<String> {
               type: fieldType,
             );
           },
-          bsBuilder: (FormFieldState<String?> field) {
+          bsBuilder: (FormFieldState<String?> field, StateSetter? bsSetState) {
             final state = field as _BisTextFieldState;
 
             return TextField(
@@ -393,6 +393,7 @@ class BisTextField extends BisFormFieldDecoration<String> {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  hintStyle: const TextStyle(fontWeight: FontWeight.normal),
                   contentPadding: const EdgeInsets.all(8)),
               keyboardType: keyboardType,
               textInputAction: textInputAction,

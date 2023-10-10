@@ -303,7 +303,7 @@ class BisFormBuilderState extends State<BisFormBuilder> {
     });
   }
 
-  void activeNextField(String currentWidget) {
+  void nextField(String currentWidget) {
     var currentIndex = _fields.entries
         .toList()
         .indexWhere((element) => element.value.widget.name == currentWidget);
@@ -357,72 +357,96 @@ class BisFormBuilderState extends State<BisFormBuilder> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
           duration: const Duration(milliseconds: 100),
-          child: Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                width: 38,
-                height: 38,
-                child: IconButton.filled(
-                  onPressed: () {
-                    deactivateBottomsheet(snapshotValue);
-                  },
-                  icon: const Icon(SentroIcon.clear),
-                  iconSize: 22,
-                  padding: EdgeInsets.zero,
-                  style: IconButton.styleFrom(
-                    backgroundColor: const Color(0xfff2f2f2),
-                    foregroundColor: const Color(0xff333333),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: Builder(
-                  builder: (_) {
-                    return fieldState.bsBuilder(fieldState);
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              SizedBox(
-                width: 38,
-                height: 38,
-                child: isLastField
-                    ? IconButton.filled(
-                        onPressed: () =>
-                            deactivateBottomsheet(fieldState.value),
-                        icon: const Icon(SentroIcon.check),
-                        iconSize: 22,
-                        padding: EdgeInsets.zero,
-                        style: IconButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          foregroundColor: const Color(0xffffffff),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      )
-                    : IconButton.filled(
-                        onPressed: () => activeNextField(widgetName),
-                        icon: const Icon(SentroIcon.arrow_right),
-                        iconSize: 22,
-                        padding: EdgeInsets.zero,
-                        style: IconButton.styleFrom(
-                          backgroundColor: const Color(0xfff2f2f2),
-                          foregroundColor: const Color(0xff333333),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 38,
+                    height: 38,
+                    child: IconButton.filled(
+                      onPressed: () {
+                        deactivateBottomsheet(snapshotValue);
+                      },
+                      icon: const Icon(SentroIcon.clear),
+                      iconSize: 22,
+                      padding: EdgeInsets.zero,
+                      style: IconButton.styleFrom(
+                        backgroundColor: const Color(0xfff2f2f2),
+                        foregroundColor: const Color(0xff333333),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: fieldState.widget.fieldType == FieldType.textfield
+                        ? Builder(
+                            builder: (_) => fieldState.bsBuilder(
+                                fieldState, _bsController?.setState),
+                          )
+                        : Text(
+                            widgetName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: Color(0xff333333),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  SizedBox(
+                    width: 38,
+                    height: 38,
+                    child: isLastField
+                        ? IconButton.filled(
+                            onPressed: () =>
+                                deactivateBottomsheet(fieldState.value),
+                            icon: const Icon(SentroIcon.check),
+                            iconSize: 22,
+                            padding: EdgeInsets.zero,
+                            style: IconButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              foregroundColor: const Color(0xffffffff),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          )
+                        : IconButton.filled(
+                            onPressed: () {
+                              nextField(widgetName);
+                            },
+                            icon: const Icon(SentroIcon.arrow_right),
+                            iconSize: 22,
+                            padding: EdgeInsets.zero,
+                            style: IconButton.styleFrom(
+                              backgroundColor: const Color(0xfff2f2f2),
+                              foregroundColor: const Color(0xff333333),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
               ),
+              if (fieldState.widget.fieldType != FieldType.textfield) ...[
+                const SizedBox(
+                  height: 8,
+                ),
+                Builder(
+                    builder: (_) => fieldState.bsBuilder(
+                        fieldState, _bsController?.setState))
+              ]
             ],
           ),
         ),

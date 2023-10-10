@@ -23,8 +23,10 @@ class BisFormFieldView extends StatelessWidget {
     bool isActive = name == formBuilderState?.currentFieldName;
     IconData iconData() {
       switch (type) {
-        case FieldType.dropdown:
+        case FieldType.selection:
           return SentroIcon.field_selection;
+        case FieldType.datepicker:
+          return SentroIcon.field_date;
         default:
           return SentroIcon.field_text;
       }
