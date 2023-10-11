@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_input_system/bottom_input_system.dart';
 import 'package:bottom_input_system/src/extensions/generic_validator.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../bis_form_field_view.dart';
 
@@ -19,7 +18,7 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
   ///
   /// If [decoration.hint] and variations is non-null and [disabledHint] is null,
   /// the [decoration.hint] widget will be displayed instead.
-  final List<DropdownMenuItem<T>> items;
+  final List<T> items;
 
   /// The maximum height of the menu.
   ///
@@ -89,67 +88,63 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
           },
           bsBuilder: (FormFieldState<T?> field, StateSetter? bsSetState) {
             final state = field as _BisSelectionState<T>;
-            final scrollController = ItemScrollController();
 
             return Container(
-              constraints: BoxConstraints(maxHeight: menuMaxHeight ?? 230),
+              constraints: const BoxConstraints.expand(height: 200),
               decoration: BoxDecoration(
                 color: const Color(0xfff2f2f2),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: ScrollablePositionedList.builder(
-                padding: const EdgeInsets.all(8),
-                initialAlignment: 0.4,
-                initialScrollIndex: max(
-                    items.map((e) => e.value).toList().indexOf(state.value), 0),
-                itemScrollController: scrollController,
-                physics: const ClampingScrollPhysics(),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  var itemValue = items[index].value as T;
-                  bool isCurrentItem =
-                      state.value.toString() == itemValue.toString();
-
-                  return GestureDetector(
-                    onTap: () {
-                      state.didChange(itemValue);
-                      bsSetState?.call(() {});
-                      scrollController.scrollTo(
-                        index: index,
-                        duration: const Duration(milliseconds: 100),
-                        alignment: 0.4,
-                      );
-                    },
+              child: Stack(
+                children: [
+                  Center(
                     child: Container(
+                      constraints: const BoxConstraints.expand(height: 40),
+                      margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: isCurrentItem
-                            ? const Color(0xffffffff)
-                            : Colors.transparent,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: isCurrentItem
-                            ? const [
-                                BoxShadow(
-                                  color: Color(0x10000000),
-                                  offset: Offset(0, 2),
-                                  blurRadius: 12,
-                                )
-                              ]
-                            : [],
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      margin: EdgeInsets.only(top: index > 0 ? 2 : 0),
-                      child: Text(
-                        itemValue.toString(),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff333333),
-                        ),
-                        textAlign: TextAlign.center,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x10000000),
+                            blurRadius: 8,
+                          )
+                        ],
                       ),
                     ),
-                  );
-                },
+                  ),
+                  Positioned.fill(
+                    child: ListWheelScrollView(
+                      itemExtent: 40,
+                      diameterRatio: 5,
+                      controller: FixedExtentScrollController(
+                        initialItem: max(
+                            0,
+                            items.indexWhere(
+                                (element) => element == state.value)),
+                      ),
+                      physics: const FixedExtentScrollPhysics(
+                        parent: ClampingScrollPhysics(),
+                      ),
+                      onSelectedItemChanged: (index) {
+                        state.didChange(items[index]);
+                        bsSetState?.call(() {});
+                      },
+                      children: List.generate(
+                        items.length,
+                        (index) => Center(
+                          child: Text(
+                            items[index].toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           },
@@ -166,11 +161,8 @@ class _BisSelectionState<T>
   void didUpdateWidget(covariant BisSelection<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    final oldValues = oldWidget.items.map((e) => e.value).toList();
-    final currentlyValues = widget.items.map((e) => e.value).toList();
-    final oldChilds = oldWidget.items.map((e) => e.child.toString()).toList();
-    final currentlyChilds =
-        widget.items.map((e) => e.child.toString()).toList();
+    final oldValues = oldWidget.items.map((e) => e).toList();
+    final currentlyValues = widget.items.map((e) => e).toList();
 
     if (!currentlyValues.contains(initialValue) &&
         !initialValue.emptyValidator()) {
@@ -183,8 +175,7 @@ class _BisSelectionState<T>
       setValue(null);
     }
 
-    if ((!listEquals(oldChilds, currentlyChilds) ||
-            !listEquals(oldValues, currentlyValues)) &&
+    if (!listEquals(oldValues, currentlyValues) &&
         (currentlyValues.contains(initialValue) ||
             initialValue.emptyValidator())) {
       setValue(initialValue);

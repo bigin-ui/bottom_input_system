@@ -1,4 +1,5 @@
 import 'package:bottom_input_system/bottom_input_system.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,11 +23,39 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class FormExample extends StatelessWidget {
+class FormExample extends StatefulWidget {
   const FormExample({super.key});
 
   @override
+  State<FormExample> createState() => _FormExampleState();
+}
+
+class _FormExampleState extends State<FormExample> {
+  late int selectedItem;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedItem = 0;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final List<String> items = [
+      'One',
+      'Two',
+      'Three',
+      'Four',
+      'Five',
+      'Six',
+      'Seven',
+      'Eight',
+      'Nine',
+      'Ten',
+      'Eleven',
+      'Twelve'
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bottom Input System'),
@@ -47,26 +76,18 @@ class FormExample extends StatelessWidget {
                 height: 8,
               ),
               BisSelection(
-                name: 'Role',
-                decoration: const InputDecoration(
-                  hintText: 'Select your role',
-                ),
-                items: [
-                  'Developer',
-                  'Product Owner',
-                  'Business Analysis',
-                  'Product Designer',
-                  'Project Coordinator',
-                  'Quality Assurance'
-                ]
-                    .map(
-                      (e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(e),
-                      ),
-                    )
-                    .toList(),
-              ),
+                  name: 'Role',
+                  decoration: const InputDecoration(
+                    hintText: 'Select your role',
+                  ),
+                  items: const [
+                    'Developer',
+                    'Product Owner',
+                    'Business Analysis',
+                    'Product Designer',
+                    'Project Coordinator',
+                    'Quality Assurance'
+                  ]),
               const SizedBox(
                 height: 8,
               ),
