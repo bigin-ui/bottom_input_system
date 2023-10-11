@@ -336,6 +336,7 @@ class BisFormBuilderState extends State<BisFormBuilder>
       });
 
       _bsController = showBottomSheet(
+        enableDrag: false,
         transitionAnimationController:
             AnimationController(vsync: this, duration: Duration.zero),
         context: context,

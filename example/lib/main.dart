@@ -41,31 +41,19 @@ class _FormExampleState extends State<FormExample> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> items = [
-      'One',
-      'Two',
-      'Three',
-      'Four',
-      'Five',
-      'Six',
-      'Seven',
-      'Eight',
-      'Nine',
-      'Ten',
-      'Eleven',
-      'Twelve'
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bottom Input System'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
         child: BisFormBuilder(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const SizedBox(
+                height: 300,
+              ),
               BisTextField(
                 name: 'Email',
                 decoration: const InputDecoration(

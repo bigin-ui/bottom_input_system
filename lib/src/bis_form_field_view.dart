@@ -33,7 +33,9 @@ class BisFormFieldView extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => formBuilderState?.activateBottomsheet(name),
+      onTap: () {
+        formBuilderState?.activateBottomsheet(name);
+      },
       child: Container(
         decoration: isActive
             ? BoxDecoration(
