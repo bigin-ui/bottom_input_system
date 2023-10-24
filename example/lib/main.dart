@@ -1,5 +1,4 @@
 import 'package:bottom_input_system/bottom_input_system.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -52,7 +51,7 @@ class _FormExampleState extends State<FormExample> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(
-                height: 300,
+                height: 320,
               ),
               BisTextField(
                 name: 'Email',
@@ -63,27 +62,28 @@ class _FormExampleState extends State<FormExample> {
               const SizedBox(
                 height: 8,
               ),
-              BisSelection(
-                  name: 'Role',
-                  decoration: const InputDecoration(
-                    hintText: 'Select your role',
-                  ),
-                  items: const [
-                    'Developer',
-                    'Product Owner',
-                    'Business Analysis',
-                    'Product Designer',
-                    'Project Coordinator',
-                    'Quality Assurance'
-                  ]),
-              const SizedBox(
-                height: 8,
-              ),
               BisTextField(
                 name: 'Name',
                 decoration: const InputDecoration(
                   hintText: 'Enter your name',
                 ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              BisSelection(
+                name: 'Role',
+                decoration: const InputDecoration(
+                  hintText: 'Select your role',
+                ),
+                items: const [
+                  'Developer',
+                  'Product Owner',
+                  'Business Analysis',
+                  'Product Designer',
+                  'Project Coordinator',
+                  'Quality Assurance'
+                ],
               ),
             ],
           ),

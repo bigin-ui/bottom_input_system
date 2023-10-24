@@ -371,6 +371,7 @@ class BisTextField extends BisFormFieldDecoration<String> {
             final state = field as _BisTextFieldState;
 
             return BisFormFieldView(
+              key: state.widgetKey,
               formBuilderState: state.formBuilderState,
               name: name,
               value: state.value,
@@ -451,6 +452,7 @@ class BisTextField extends BisFormFieldDecoration<String> {
               contentInsertionConfiguration: contentInsertionConfiguration,
             );
           },
+          bsHeight: 56,
         );
 
   static Widget _defaultContextMenuBuilder(

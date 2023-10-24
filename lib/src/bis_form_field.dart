@@ -51,6 +51,7 @@ class BisFormField<T> extends FormField<T> {
   /// passed the form field state as input, containing the current value and
   /// validation state of this field.
   final FormFieldBsBuilder<T> bsBuilder;
+  final double bsHeight;
 
   /// Creates a single form field.
   const BisFormField({
@@ -63,6 +64,7 @@ class BisFormField<T> extends FormField<T> {
     super.restorationId,
     required super.builder,
     required this.bsBuilder,
+    required this.bsHeight,
     required this.name,
     required this.fieldType,
     this.valueTransformer,
@@ -84,9 +86,12 @@ class BisFormFieldState<F extends BisFormField<T>, T>
   bool _dirty = false;
   late FocusNode effectiveFocusNode;
   FocusAttachment? focusAttachment;
+  final GlobalKey _key = GlobalKey();
 
   @override
   F get widget => super.widget as F;
+
+  GlobalKey get widgetKey => _key;
 
   BisFormBuilderState? get formBuilderState => _formBuilderState;
 
@@ -126,6 +131,7 @@ class BisFormFieldState<F extends BisFormField<T>, T>
   bool get isTouched => _touched;
 
   get bsBuilder => widget.bsBuilder;
+  get bsHeight => widget.bsHeight;
 
   void registerTransformer(Map<String, Function> map) {
     final fun = widget.valueTransformer;
@@ -297,6 +303,9 @@ class BisFormFieldState<F extends BisFormField<T>, T>
   }
 
   void ensureScrollableVisibility() {
-    Scrollable.ensureVisible(context);
+    Scrollable.ensureVisible(
+      widgetKey.currentContext!,
+      duration: const Duration(milliseconds: 200),
+    );
   }
 }

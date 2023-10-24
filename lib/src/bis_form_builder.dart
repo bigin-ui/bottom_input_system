@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bottom_input_system/src/extensions/sentro_icon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_input_system/bottom_input_system.dart';
@@ -110,7 +112,9 @@ class BisFormBuilderState extends State<BisFormBuilder>
   final Map<String, Function> _transformers = {};
   bool _focusOnInvalid = true;
   PersistentBottomSheetController? _bsController;
-  String currentFieldName = '';
+  String _currentFieldName = '';
+  double _bsHeight = 0;
+  double _paddingBottom = 0;
 
   /// Will be true if will focus on invalid field when validate
   ///
@@ -153,6 +157,8 @@ class BisFormBuilderState extends State<BisFormBuilder>
   Map<String, dynamic> get value =>
       Map<String, dynamic>.unmodifiable(_savedValue.map((key, value) =>
           MapEntry(key, _transformers[key]?.call(value) ?? value)));
+
+  String get currentFieldName => _currentFieldName;
 
   dynamic transformValue<T>(String name, T? v) {
     final t = _transformers[name];
@@ -322,17 +328,21 @@ class BisFormBuilderState extends State<BisFormBuilder>
 
     void deactivateBottomsheet(dynamic fieldValue) {
       setState(() {
-        currentFieldName = '';
+        _currentFieldName = '';
         fieldState.didChange(fieldValue);
+        _bsHeight = 0;
       });
       _bsController?.close();
     }
 
-    if (currentFieldName != widgetName) {
+    if (_currentFieldName != widgetName) {
       setState(() {
-        currentFieldName = widgetName;
+        _currentFieldName = widgetName;
         // Trigger rebuild BisFormFieldView
         fieldState.didChange(snapshotValue);
+        _paddingBottom =
+            max(_paddingBottom, MediaQuery.of(context).padding.bottom);
+        _bsHeight = fieldState.bsHeight + _paddingBottom;
       });
 
       _bsController = showBottomSheet(
@@ -455,6 +465,10 @@ class BisFormBuilderState extends State<BisFormBuilder>
           ),
         ),
       );
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+        fieldState.ensureScrollableVisibility();
+      });
     }
   }
 
@@ -469,7 +483,10 @@ class BisFormBuilderState extends State<BisFormBuilder>
         formState: this,
         child: FocusTraversalGroup(
           policy: WidgetOrderTraversalPolicy(),
-          child: widget.child,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: _bsHeight),
+            child: widget.child,
+          ),
         ),
       ),
     );

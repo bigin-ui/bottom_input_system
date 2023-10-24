@@ -22,6 +22,7 @@ class BisFormFieldDecoration<T> extends BisFormField<T> {
     super.focusNode,
     required super.builder,
     required super.bsBuilder,
+    required super.bsHeight,
     this.decoration = const InputDecoration(),
   });
   final InputDecoration decoration;

@@ -79,6 +79,7 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
             final state = field as _BisSelectionState<T>;
 
             return BisFormFieldView(
+              key: state.widgetKey,
               formBuilderState: state.formBuilderState,
               name: name,
               value: state.value,
@@ -90,7 +91,7 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
             final state = field as _BisSelectionState<T>;
 
             return Container(
-              constraints: const BoxConstraints.expand(height: 200),
+              constraints: const BoxConstraints.expand(height: 280),
               decoration: BoxDecoration(
                 color: const Color(0xfff2f2f2),
                 borderRadius: BorderRadius.circular(16),
@@ -99,7 +100,7 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
                 children: [
                   Center(
                     child: Container(
-                      constraints: const BoxConstraints.expand(height: 40),
+                      constraints: const BoxConstraints.expand(height: 48),
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -115,8 +116,8 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
                   ),
                   Positioned.fill(
                     child: ListWheelScrollView(
-                      itemExtent: 40,
-                      diameterRatio: 5,
+                      itemExtent: 56,
+                      diameterRatio: 10,
                       controller: FixedExtentScrollController(
                         initialItem: max(
                             0,
@@ -148,6 +149,7 @@ class BisSelection<T> extends BisFormFieldDecoration<T> {
               ),
             );
           },
+          bsHeight: 336,
         );
 
   @override
